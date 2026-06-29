@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
+  <title>Лунный свет | Ты не одна</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a1a1f;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+      padding: 1rem;
+      margin: 0;
+    }
+
+    .forest-container {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      background: #0b1c24;
+      border-radius: 3rem 3rem 2.5rem 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(90, 180, 200, 0.25);
+      aspect-ratio: 4 / 5;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(ellipse at 50% 20%, #1a3a44 5%, #0b1c24 70%);
+    }
+
+    .sky-forest {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      background: linear-gradient(180deg, #0b2833 0%, #0f2a2f 40%, #142f2b 100%);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .moon {
+      position: absolute;
+      top: 12%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28%;
+      aspect-ratio: 1/1;
+      background: radial-gradient(circle at 30% 30%, #fffde7, #f7e9c3 30%, #e6d7a3 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 70px rgba(255, 250, 210, 0.9), 0 0 140px rgba(240, 220, 140, 0.7), 0 0 200px rgba(200, 200, 120, 0.5);
+      z-index: 2;
+    }
+
+    .moon::before {
+      content: "";
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      width: 20%;
+      height: 20%;
+      background: rgba(180, 160, 110, 0.4);
+      border-radius: 50%;
+      box-shadow: 35px 15px 0 -2px rgba(160, 140, 90, 0.5), 10px 45px 0 1px rgba(150, 130, 80, 0.5), -10px 30px 0 -3px rgba(170, 150, 90, 0.5);
+    }
+
+    .trees {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 65%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .tree-silhouette {
+      position: absolute;
+      bottom: 0;
+      background: #0a181c;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .tree1 {
+      left: 5%;
+      width: 14%;
+      height: 60%;
+      background: #081a1b;
+      border-radius: 40% 60% 0 0;
+      box-shadow: 5px -10px 15px rgba(0,0,0,0.7);
+    }
+    .tree2 {
+      left: 22%;
+      width: 12%;
+      height: 70%;
+      background: #0c1e1f;
+      border-radius: 30% 70% 0 0;
+    }
+    .tree3 {
+      left: 38%;
+      width: 16%;
+      height: 75%;
+      background: #091817;
+      border-radius: 50% 50% 0 0;
+      box-shadow: -8px -5px 12px rgba(0,0,0,0.6);
+    }
+    .tree4 {
+      left: 58%;
+      width: 14%;
+      height: 65%;
+      background: #0a1c1d;
+      border-radius: 35% 65% 0 0;
+    }
+    .tree5 {
+      left: 75%;
+      width: 13%;
+      height: 68%;
+      background: #081716;
+      border-radius: 40% 60% 0 0;
+    }
+    .tree6 {
+      left: 88%;
+      width: 12%;
+      height: 55%;
+      background: #0b1f1e;
+      border-radius: 30% 70% 0 0;
+    }
+
+    .branch {
+      position: absolute;
+      background: #0a181c;
+      height: 8%;
+      width: 25%;
+      border-radius: 0 60% 20% 0;
+    }
+
+    .fog {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, rgba(180, 210, 210, 0.15), transparent);
+      z-index: 4;
+    }
+
+    .content-panel {
+      position: relative;
+      background: rgba(8, 25, 30, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 2px solid rgba(70, 160, 160, 0.5);
+      padding: 1.6rem 1.2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 10;
+      box-shadow: 0 -10px 30px rgba(0, 20, 20, 0.7);
+    }
+
+    .message {
+      color: #d4f0f0;
+      font-size: 1.2rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      text-align: center;
+      text-shadow: 0 2px 6px #0a2020;
+      background: rgba(15, 45, 45, 0.5);
+      padding: 0.5rem 1.2rem;
+      border-radius: 3rem;
+      margin-bottom: 0.3rem;
+      line-height: 1.4;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .night-btn {
+      background: rgba(20, 70, 75, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid #3a9090;
+      color: #c5f0f0;
+      padding: 0.8rem 1.6rem;
+      border-radius: 3rem;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(145deg, #1e4f55, #0c353a);
+      box-shadow: 0 5px 12px rgba(0, 20, 20, 0.6), 0 0 8px rgba(50, 150, 150, 0.5);
+      text-shadow: 0 1px 4px #032020;
+    }
+
+    .night-btn:hover {
+      background: linear-gradient(145deg, #256a70, #134b4f);
+      border-color: #6ad4d4;
+      color: #e8ffff;
+      box-shadow: 0 8px 18px rgba(0, 30, 30, 0.9), 0 0 16px #4db8b8;
+      transform: translateY(-2px);
+    }
+
+    .night-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    }
+
+    .animation-stage {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      margin-top: 0.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2rem;
+      overflow: visible;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    .caption {
+      color: #aacfcf;
+      font-size: 0.8rem;
+      margin-top: 0.1rem;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 450px) {
+      .night-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="forest-container">
+    <div class="sky-forest">
+      <div class="moon"></div>
+      <div class="trees">
+        <div class="tree-silhouette tree1"></div>
+        <div class="tree-silhouette tree2"></div>
+        <div class="tree-silhouette tree3"></div>
+        <div class="tree-silhouette tree4"></div>
+        <div class="tree-silhouette tree5"></div>
+        <div class="tree-silhouette tree6"></div>
+      </div>
+      <div class="fog"></div>
+    </div>
+
+    <div class="content-panel">
+      <div class="message" id="statusMessage">
+        Ты в моём сердце, даже за тысячи километров 🌙
+      </div>
+      <div class="buttons">
+        <button class="night-btn" id="hugBtn">🤍 Обнять</button>
+        <button class="night-btn" id="replayBtn">🔄 Ещё раз</button>
+      </div>
+      <div class="animation-stage">
+        <canvas id="storyCanvas" width="300" height="120"></canvas>
+      </div>
+      <div class="caption">палочки, но тепло</div>
+    </div>
+  </div>
