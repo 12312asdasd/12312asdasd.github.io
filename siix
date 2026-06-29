@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>для Киры ✦ ночной минифильм</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a1929;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      padding: 1rem;
+      transition: background 1.2s ease;
+    }
+
+    /* ночной мягкий фон */
+    .stage {
+      width: 100%;
+      max-width: 700px;
+      background: #0b1e33;
+      background-image: radial-gradient(circle at 20% 30%, #173a5c 5%, #0b1e33 90%);
+      border-radius: 3rem 3rem 2rem 2rem;
+      box-shadow: 0 20px 40px rgba(0, 20, 40, 0.7), 0 0 0 2px rgba(0, 180, 216, 0.3);
+      padding: 2rem 1.5rem 2.5rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.8s ease, box-shadow 0.8s;
+      position: relative;
+      color: #b6e6f7;
+    }
+
+    /* текстовая панель */
+    .message-box {
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      text-align: center;
+      color: #d4f0ff;
+      text-shadow: 0 0 12px #4db8d1;
+      transition: opacity 0.6s ease;
+      min-height: 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    /* холст для человечков и сцен */
+    .canvas-area {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s;
+      margin: 0.5rem 0 0.2rem;
+    }
+
+    canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      background: transparent;
+      border-radius: 2rem;
+    }
+
+    /* маленькая подсказка */
+    .sub-message {
+      font-size: 1.1rem;
+      color: #ffe9b6;
+      text-shadow: 0 0 8px #b68b40;
+      margin-top: 0.4rem;
+      opacity: 0.9;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* затемнение всего экрана для переходов */
+    .dark-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #030a14;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      z-index: 10;
+    }
+
+    .dark-overlay.active {
+      opacity: 1;
+    }
+
+    /* адаптив */
+    @media (max-width: 450px) {
+      .message-box {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dark-overlay" id="darkOverlay"></div>
+
+  <div class="stage" id="stage">
+    <!-- текстовый блок -->
+    <div class="message-box" id="messageDisplay">✨</div>
+    <!-- холст для рисования -->
+    <div class="canvas-area" id="canvasContainer">
+      <canvas id="sceneCanvas" width="500" height="300"></canvas>
+    </div>
+    <!-- дополнительная надпись (например минифильм) -->
+    <div class="sub-message" id="subMessage"></div>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- НАСТРОЙКИ ЦВЕТОВ (ночные, мягкие) ----------
+      const COLORS = {
+        bgDark: '#0a1a2b',
+        bgRiver: '#0e2740',
+        stickLight: '#b3e0f5',
+        stickBlue: '#5da9c7',
+        yellowSoft: '#f5e56c',
+        teal: '#3aa8b0',
+        carColor: '#245b6b',
+        busColor: '#2d6b7a',
+        water: '#1b5b6e',
+      };
+
+      // ---------- ЭЛЕМЕНТЫ ----------
+      const canvas = document.getElementById('sceneCanvas');
+      const ctx = canvas.getContext('2d');
+      const messageEl = document.getElementById('messageDisplay');
+      const subEl = document.getElementById('subMessage');
+      const darkOverlay = document.getElementById('darkOverlay');
+
+      // размеры canvas (адаптируем под контейнер)
+      function resizeCanvas() {
+        const container = document.getElementById('canvasContainer');
+        const w = container.clientWidth;
+        const maxW = 500;
+        const width = Math.min(w, maxW);
+        const height = width * 0.6; // пропорция 5:3
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // ---------- УТИЛИТЫ ----------
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // рисование палочного человечка
+      function drawStickPerson(x, y, scale = 1, color = COLORS.stickLight, lineWidth = 2.5) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // голова
+        ctx.beginPath();
+        ctx.arc(0, -18, 8, 0, Math.PI * 2);
+        ctx.stroke();
+        // тело
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(0, 22);
+        ctx.stroke();
+        // ноги
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(-10, 38);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(10, 38);
+        ctx.stroke();
+        // руки
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(-12, 12);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(12, 12);
+        ctx.stroke();
+
+        // глаза и улыбка (точки)
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(-3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        // улыбка
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.3;
+        ctx.arc(0, -16, 4, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // машущая рука (поднята)
+      function drawWavingPerson(x, y, scale = 1, color = COLORS.stickLight, waveArm = 'right') {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+
+        // голова
+        ctx.beginPath();
+        ctx.arc(0, -18, 8, 0, Math.PI*2);
+        ctx.stroke();
+        // тело
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(0, 22);
+        ctx.stroke();
+        // ноги
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(-10, 38);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(10, 38);
+        ctx.stroke();
+
+        // левая рука обычная
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(-12, 12);
+        ctx.stroke();
+
+        // правая машет (вверх)
+        if (waveArm === 'right') {
+          ctx.beginPath();
+          ctx.moveTo(0, -2);
+          ctx.lineTo(14, -16);
+          ctx.stroke();
+          // кисть
+          ctx.beginPath();
+          ctx.arc(14, -16, 2.2, 0, Math.PI*2);
+          ctx.stroke();
+        } else {
+          // левая машет
+          ctx.beginPath();
+          ctx.moveTo(0, -2);
+          ctx.lineTo(-14, -16);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(-14, -16, 2.2, 0, Math.PI*2);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(-3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.3;
+        ctx.arc(0, -16, 4, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // машинка простенькая
+      function drawCar(x, y, scale = 1, color = COLORS.carColor) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.fillStyle = color;
+        ctx.strokeStyle = COLORS.stickBlue;
+        ctx.lineWidth = 1.8;
+
+        // кузов
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.rect(-22, -12, 44, 16);
+        ctx.fill();
+        ctx.stroke();
+        // крыша
+        ctx.fillStyle = '#1f4655';
+        ctx.beginPath();
+        ctx.moveTo(-10, -12);
+        ctx.lineTo(-4, -22);
+        ctx.lineTo(12, -22);
+        ctx.lineTo(18, -12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // окна
+        ctx.fillStyle = '#b5e0f0';
+        ctx.beginPath();
+        ctx.moveTo(-7, -12);
+        ctx.lineTo(-2, -20);
+        ctx.lineTo(5, -20);
+        ctx.lineTo(5, -12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(7, -12);
+        ctx.lineTo(7, -20);
+        ctx.lineTo(14, -12);
+        ctx.closePath();
+        ctx.fill();
+
+        // колеса
+        ctx.fillStyle = '#0d0f14';
+        ctx.beginPath();
+        ctx.arc(-13, 6, 5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#b6cfdd';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(13, 6, 5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // автобус
+      function drawBus(x, y, scale = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.fillStyle = COLORS.busColor;
+        ctx.strokeStyle = '#b3dff0';
+        ctx.lineWidth = 1.8;
+        // кузов
+        ctx.fillStyle = COLORS.busColor;
+        ctx.beginPath();
+        ctx.rect(-35, -16, 70, 22);
+        ctx.fill();
+        ctx.stroke();
+        // окна
+        ctx.fillStyle = '#c1e7f5';
+        for (let i = -25; i <= 15; i += 14) {
+          ctx.beginPath();
+          ctx.rect(i, -13, 10, 9);
+          ctx.fill();
+          ctx.strokeStyle = '#204b57';
+          ctx.stroke();
+        }
+        // колеса
+        ctx.fillStyle = '#0b1219';
+        ctx.beginPath();
+        ctx.arc(-20, 8, 6, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#c5dee8';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(20, 8, 6, 0, Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // речка и пловцы
+      function drawRiverScene() {
+        clearCanvas();
+        const w = canvas.width;
+        const h = canvas.height;
+        // вода
+        ctx.fillStyle = '#0f3b4b';
+        ctx.fillRect(0, h*0.35, w, h*0.65);
+        // берег
+        ctx.fillStyle = '#1e3b2f';
+        ctx.fillRect(0, h*0.55, w, h*0.2);
+        // волны
+        ctx.fillStyle = '#3b8b9c';
+        for (let i=0; i<8; i++) {
+          ctx.beginPath();
+          ctx.arc(40 + i*60, h*0.5, 14, 0, Math.PI);
+          ctx.fill();
+        }
+        // люди купаются
+        drawStickPerson(w*0.2, h*0.65, 0.9, '#d6f0ff');
+        drawStickPerson(w*0.35, h*0.7, 0.9, '#f5e9b8');
+        drawStickPerson(w*0.55, h*0.66, 0.85, '#b8e2f2');
+        drawStickPerson(w*0.7, h*0.72, 0.9, '#fceea7');
+        // веселье: брызги
+        ctx.fillStyle = '#a3dae8';
+        for (let i=0; i<5; i++) {
+          ctx.beginPath();
+          ctx.arc(w*0.3 + i*12, h*0.48, 2, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+
+      // ---------- СЦЕНАРИЙ ----------
+      function setMessage(text, sub = '') {
+        messageEl.style.opacity = '1';
+        messageEl.textContent = text;
+        subEl.textContent = sub;
+      }
+
+      function fadeMessage() {
+        messageEl.style.opacity = '0';
+      }
+
+      async function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function overlayDarkenAndLighten(darkDuration = 1200, pauseDark = 600) {
+        darkOverlay.classList.add('active');
+        await delay(darkDuration);
+        // пока темно
+        await delay(pauseDark);
+        darkOverlay.classList.remove('active');
+        await delay(800);
+      }
+
+      // главная последовательность
+      async function runMovie() {
+        resizeCanvas();
+        clearCanvas();
+        subEl.textContent = '';
+        messageEl.style.opacity = '1';
+
+        // 1. Привет Кира
+        setMessage('Привет, Кира ✦');
+        await delay(5000);
+        fadeMessage();
+        await delay(800);
+
+        // 2. Текст ценности
+        setMessage('Мы тебя очень ценим и надеемся, что ты не грустишь из-за этого.');
+        await delay(10000);
+        fadeMessage();
+        await delay(700);
+
+        // 3. Три человечка обнимаются
+        clearCanvas();
+        messageEl.style.opacity = '0';
+        const w = canvas.width, h = canvas.height;
+        drawStickPerson(w*0.25, h*0.65, 0.95, '#b3e5f5');
+        drawStickPerson(w*0.5, h*0.65, 0.95, '#f5e56c');
+        drawStickPerson(w*0.75, h*0.65, 0.95, '#7fcde1');
+        setMessage('', '');
+        await delay(2500);
+        // один отходит и уезжает
+        clearCanvas();
+        // два человека слева, один справа
+        drawStickPerson(w*0.2, h*0.7, 0.9, '#b3e5f5');
+        drawStickPerson(w*0.4, h*0.7, 0.9, '#f5e56c');
+        drawStickPerson(w*0.75, h*0.68, 0.9, '#7fcde1');
+        await delay(1500);
+        // появляется машина и третий уезжает
+        clearCanvas();
+        drawCar(w*0.7, h*0.58, 0.9);
+        drawStickPerson(w*0.82, h*0.65, 0.8, '#7fcde1'); // внутри
+        drawWavingPerson(w*0.25, h*0.7, 0.9, '#b3e5f5', 'right');
+        drawWavingPerson(w*0.45, h*0.7, 0.9, '#f5e56c', 'right');
+        await delay(3000);
+        
+        // надпись "мы всегда будем помнить о тебе"
+        clearCanvas();
+        drawWavingPerson(w*0.3, h*0.7, 0.85, '#b3e5f5', 'right');
+        drawWavingPerson(w*0.6, h*0.7, 0.85, '#f5e56c', 'right');
+        setMessage('мы всегда будем помнить о тебе');
+        await delay(4500);
+        fadeMessage();
+        
+        // надпись "минифильм"
+        setMessage('минифильм ✦', '');
+        await delay(2500);
+        
+        // затемнение экрана
+        await overlayDarkenAndLighten(1300, 400);
+
+        // 4. Остановка, 4 человечка
+        clearCanvas();
+        messageEl.style.opacity = '0';
+        // скамейка остановки
+        ctx.fillStyle = '#2f4b59';
+        ctx.fillRect(w*0.15, h*0.68, w*0.7, 8);
+        drawStickPerson(w*0.2, h*0.62, 0.8, '#bee2f0');
+        drawStickPerson(w*0.37, h*0.63, 0.8, '#f7e583');
+        drawStickPerson(w*0.55, h*0.61, 0.8, '#8dcfe0');
+        drawStickPerson(w*0.72, h*0.63, 0.8, '#ebd879');
+        // диалог появляется как сообщение
+        setMessage('«Где будем в ГЗ гулять?»', '');
+        await delay(3000);
+        setMessage('«Может купаться на речку сходим?»', '');
+        await delay(3500);
+        setMessage('(все кивнули и сказали «да»)');
+        await delay(2000);
+        
+        // подъезжает автобус
+        clearCanvas();
+        drawBus(w*0.5, h*0.48, 0.9);
+        drawStickPerson(w*0.25, h*0.65, 0.75, '#bee2f0');
+        drawStickPerson(w*0.43, h*0.66, 0.75, '#f7e583');
+        drawStickPerson(w*0.58, h*0.64, 0.75, '#8dcfe0');
+        drawStickPerson(w*0.72, h*0.66, 0.75, '#ebd879');
+        await delay(2500);
+        setMessage('Все сели в автобус ✦');
+        await delay(2000);
+        
+        // затемнение
+        await overlayDarkenAndLighten(1200, 500);
+        
+        // 5. Купание в речке
+        drawRiverScene();
+        setMessage('', '');
+        await delay(1200);
+        setMessage('Мы очень дорожим тобой, Кира ✦', '');
+        // дополнительно можно оставить
+        await delay(7000);
+        
+        // финал: надпись остается, фон чуть мягче
+        setMessage('Мы очень дорожим тобой, Кира ✦', 'навсегда в памяти');
+      }
+
+      // старт после загрузки
+      window.addEventListener('load', () => {
+        resizeCanvas();
+        runMovie().catch(e => console.error('сценарий прерван', e));
+      });
+
+    })();
+  </script>
+</body>
+</html>
