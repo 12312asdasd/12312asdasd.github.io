@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
-  <title>Лунный свет | Ты не одна</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>для Киры ✦ ночной минифильм</title>
   <style>
     * {
       margin: 0;
@@ -12,610 +12,545 @@
     }
 
     body {
-      background: #0a1a1f;
+      background: #0a1929;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
       padding: 1rem;
-      margin: 0;
+      transition: background 1.2s ease;
     }
 
-    .forest-container {
-      position: relative;
+    /* ночной мягкий фон */
+    .stage {
       width: 100%;
-      max-width: 720px;
-      background: #0b1c24;
-      border-radius: 3rem 3rem 2.5rem 2.5rem;
-      overflow: hidden;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(90, 180, 200, 0.25);
-      aspect-ratio: 4 / 5;
+      max-width: 700px;
+      background: #0b1e33;
+      background-image: radial-gradient(circle at 20% 30%, #173a5c 5%, #0b1e33 90%);
+      border-radius: 3rem 3rem 2rem 2rem;
+      box-shadow: 0 20px 40px rgba(0, 20, 40, 0.7), 0 0 0 2px rgba(0, 180, 216, 0.3);
+      padding: 2rem 1.5rem 2.5rem;
+      min-height: 500px;
       display: flex;
       flex-direction: column;
-      background: radial-gradient(ellipse at 50% 20%, #1a3a44 5%, #0b1c24 70%);
-    }
-
-    .sky-forest {
-      position: relative;
-      flex: 1;
-      width: 100%;
-      background: linear-gradient(180deg, #0b2833 0%, #0f2a2f 40%, #142f2b 100%);
-      overflow: hidden;
-      display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: center;
-    }
-
-    .moon {
-      position: absolute;
-      top: 12%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 28%;
-      aspect-ratio: 1/1;
-      background: radial-gradient(circle at 30% 30%, #fffde7, #f7e9c3 30%, #e6d7a3 80%);
-      border-radius: 50%;
-      box-shadow: 0 0 70px rgba(255, 250, 210, 0.9), 0 0 140px rgba(240, 220, 140, 0.7), 0 0 200px rgba(200, 200, 120, 0.5);
-      z-index: 2;
-    }
-
-    .moon::before {
-      content: "";
-      position: absolute;
-      top: 25%;
-      left: 25%;
-      width: 20%;
-      height: 20%;
-      background: rgba(180, 160, 110, 0.4);
-      border-radius: 50%;
-      box-shadow: 35px 15px 0 -2px rgba(160, 140, 90, 0.5), 10px 45px 0 1px rgba(150, 130, 80, 0.5), -10px 30px 0 -3px rgba(170, 150, 90, 0.5);
-    }
-
-    .trees {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 65%;
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    .tree-silhouette {
-      position: absolute;
-      bottom: 0;
-      background: #0a181c;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-
-    .tree1 {
-      left: 5%;
-      width: 14%;
-      height: 60%;
-      background: #081a1b;
-      border-radius: 40% 60% 0 0;
-      box-shadow: 5px -10px 15px rgba(0,0,0,0.7);
-    }
-    .tree2 {
-      left: 22%;
-      width: 12%;
-      height: 70%;
-      background: #0c1e1f;
-      border-radius: 30% 70% 0 0;
-    }
-    .tree3 {
-      left: 38%;
-      width: 16%;
-      height: 75%;
-      background: #091817;
-      border-radius: 50% 50% 0 0;
-      box-shadow: -8px -5px 12px rgba(0,0,0,0.6);
-    }
-    .tree4 {
-      left: 58%;
-      width: 14%;
-      height: 65%;
-      background: #0a1c1d;
-      border-radius: 35% 65% 0 0;
-    }
-    .tree5 {
-      left: 75%;
-      width: 13%;
-      height: 68%;
-      background: #081716;
-      border-radius: 40% 60% 0 0;
-    }
-    .tree6 {
-      left: 88%;
-      width: 12%;
-      height: 55%;
-      background: #0b1f1e;
-      border-radius: 30% 70% 0 0;
-    }
-
-    .branch {
-      position: absolute;
-      background: #0a181c;
-      height: 8%;
-      width: 25%;
-      border-radius: 0 60% 20% 0;
-    }
-
-    .fog {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 30%;
-      background: linear-gradient(to top, rgba(180, 210, 210, 0.15), transparent);
-      z-index: 4;
-    }
-
-    .content-panel {
+      transition: background 0.8s ease, box-shadow 0.8s;
       position: relative;
-      background: rgba(8, 25, 30, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 2px solid rgba(70, 160, 160, 0.5);
-      padding: 1.6rem 1.2rem 1.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-      z-index: 10;
-      box-shadow: 0 -10px 30px rgba(0, 20, 20, 0.7);
+      color: #b6e6f7;
     }
 
-    .message {
-      color: #d4f0f0;
-      font-size: 1.2rem;
+    /* текстовая панель */
+    .message-box {
+      font-size: 1.8rem;
       font-weight: 400;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.03em;
       text-align: center;
-      text-shadow: 0 2px 6px #0a2020;
-      background: rgba(15, 45, 45, 0.5);
-      padding: 0.5rem 1.2rem;
-      border-radius: 3rem;
-      margin-bottom: 0.3rem;
+      color: #d4f0ff;
+      text-shadow: 0 0 12px #4db8d1;
+      transition: opacity 0.6s ease;
+      min-height: 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-word;
       line-height: 1.4;
     }
 
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin: 0.2rem 0 0.4rem;
-    }
-
-    .night-btn {
-      background: rgba(20, 70, 75, 0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1.5px solid #3a9090;
-      color: #c5f0f0;
-      padding: 0.8rem 1.6rem;
-      border-radius: 3rem;
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: 0.6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: linear-gradient(145deg, #1e4f55, #0c353a);
-      box-shadow: 0 5px 12px rgba(0, 20, 20, 0.6), 0 0 8px rgba(50, 150, 150, 0.5);
-      text-shadow: 0 1px 4px #032020;
-    }
-
-    .night-btn:hover {
-      background: linear-gradient(145deg, #256a70, #134b4f);
-      border-color: #6ad4d4;
-      color: #e8ffff;
-      box-shadow: 0 8px 18px rgba(0, 30, 30, 0.9), 0 0 16px #4db8b8;
-      transform: translateY(-2px);
-    }
-
-    .night-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
-    }
-
-    .animation-stage {
-      position: relative;
+    /* холст для человечков и сцен */
+    .canvas-area {
       width: 100%;
-      height: 120px;
-      margin-top: 0.2rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 2rem;
-      overflow: visible;
+      transition: opacity 0.5s;
+      margin: 0.5rem 0 0.2rem;
     }
 
     canvas {
       display: block;
+      max-width: 100%;
+      height: auto;
+      background: transparent;
+      border-radius: 2rem;
+    }
+
+    /* маленькая подсказка */
+    .sub-message {
+      font-size: 1.1rem;
+      color: #ffe9b6;
+      text-shadow: 0 0 8px #b68b40;
+      margin-top: 0.4rem;
+      opacity: 0.9;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* затемнение всего экрана для переходов */
+    .dark-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: transparent;
+      background: #030a14;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      z-index: 10;
     }
 
-    .caption {
-      color: #aacfcf;
-      font-size: 0.8rem;
-      margin-top: 0.1rem;
-      opacity: 0.9;
+    .dark-overlay.active {
+      opacity: 1;
     }
 
+    /* адаптив */
     @media (max-width: 450px) {
-      .night-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
+      .message-box {
+        font-size: 1.4rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="forest-container">
-    <div class="sky-forest">
-      <div class="moon"></div>
-      <div class="trees">
-        <div class="tree-silhouette tree1"></div>
-        <div class="tree-silhouette tree2"></div>
-        <div class="tree-silhouette tree3"></div>
-        <div class="tree-silhouette tree4"></div>
-        <div class="tree-silhouette tree5"></div>
-        <div class="tree-silhouette tree6"></div>
-      </div>
-      <div class="fog"></div>
-    </div>
+  <div class="dark-overlay" id="darkOverlay"></div>
 
-    <div class="content-panel">
-      <div class="message" id="statusMessage">
-        Ты в моём сердце, даже за тысячи километров 🌙
-      </div>
-      <div class="buttons">
-        <button class="night-btn" id="hugBtn">🤍 Обнять</button>
-        <button class="night-btn" id="replayBtn">🔄 Ещё раз</button>
-      </div>
-      <div class="animation-stage">
-        <canvas id="storyCanvas" width="300" height="120"></canvas>
-      </div>
-      <div class="caption">палочки, но тепло</div>
+  <div class="stage" id="stage">
+    <!-- текстовый блок -->
+    <div class="message-box" id="messageDisplay">✨</div>
+    <!-- холст для рисования -->
+    <div class="canvas-area" id="canvasContainer">
+      <canvas id="sceneCanvas" width="500" height="300"></canvas>
     </div>
+    <!-- дополнительная надпись (например минифильм) -->
+    <div class="sub-message" id="subMessage"></div>
   </div>
-<script>
-  (function() {
-    const canvas = document.getElementById('storyCanvas');
-    const ctx = canvas.getContext('2d');
 
-    // Элементы для сообщений
-    const statusDiv = document.getElementById('statusMessage');
+  <script>
+    (function() {
+      // ---------- НАСТРОЙКИ ЦВЕТОВ (ночные, мягкие) ----------
+      const COLORS = {
+        bgDark: '#0a1a2b',
+        bgRiver: '#0e2740',
+        stickLight: '#b3e0f5',
+        stickBlue: '#5da9c7',
+        yellowSoft: '#f5e56c',
+        teal: '#3aa8b0',
+        carColor: '#245b6b',
+        busColor: '#2d6b7a',
+        water: '#1b5b6e',
+      };
 
-    // Состояния анимации
-    let animationId = null;
-    let currentScene = 'idle'; // idle, hugging, carLeaving, complete
-    let progress = 0; // 0 до 1
+      // ---------- ЭЛЕМЕНТЫ ----------
+      const canvas = document.getElementById('sceneCanvas');
+      const ctx = canvas.getContext('2d');
+      const messageEl = document.getElementById('messageDisplay');
+      const subEl = document.getElementById('subMessage');
+      const darkOverlay = document.getElementById('darkOverlay');
 
-    // Параметры фигур (палочные человечки)
-    const leftPerson = { baseX: 105, groundY: 90 };
-    const rightPerson = { baseX: 175, groundY: 90 };
-
-    // Машина (упрощённая)
-    const car = {
-      x: 240,
-      y: 70,
-      width: 48,
-      height: 22,
-      wheelRadius: 6,
-    };
-
-    // Функция остановки анимации
-    function stopAnimation() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
+      // размеры canvas (адаптируем под контейнер)
+      function resizeCanvas() {
+        const container = document.getElementById('canvasContainer');
+        const w = container.clientWidth;
+        const maxW = 500;
+        const width = Math.min(w, maxW);
+        const height = width * 0.6; // пропорция 5:3
+        canvas.width = width;
+        canvas.height = height;
       }
-    }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
 
-    // Рисование палочного человека
-    function drawStickPerson(x, y, options = {}) {
-      const {
-        armsUp = false,
-        armAngleOffset = 0,
-        lean = 0,
-        mirror = false,
-        sitting = false,
-        inCar = false
-      } = options;
-
-      ctx.save();
-      ctx.translate(x, y);
-      
-      if (inCar) {
-        // Голова
-        ctx.beginPath();
-        ctx.arc(0, -22, 6, 0, Math.PI * 2);
-        ctx.strokeStyle = '#e0f0f0';
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-        // тело короткое
-        ctx.beginPath();
-        ctx.moveTo(0, -16);
-        ctx.lineTo(0, -2);
-        ctx.stroke();
-        ctx.restore();
-        return;
+      // ---------- УТИЛИТЫ ----------
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
 
-      const bodyLength = sitting ? 13 : 18;
-      const legOffsetY = sitting ? 5 : 0;
-
-      // Голова
-      ctx.beginPath();
-      ctx.arc(0, -bodyLength - 2, 6, 0, Math.PI * 2);
-      ctx.strokeStyle = '#d4ecec';
-      ctx.lineWidth = 2.4;
-      ctx.stroke();
-
-      // Тело
-      ctx.beginPath();
-      ctx.moveTo(0, -bodyLength + 4);
-      ctx.lineTo(0, legOffsetY);
-      ctx.stroke();
-
-      // Руки
-      const shoulderY = -bodyLength + 6;
-      ctx.beginPath();
-      if (armsUp) {
-        ctx.moveTo(0, shoulderY);
-        ctx.lineTo(-14, shoulderY - 12);
-        ctx.moveTo(0, shoulderY);
-        ctx.lineTo(14, shoulderY - 12);
-      } else {
-        const armDir = mirror ? -1 : 1;
-        ctx.moveTo(0, shoulderY);
-        ctx.lineTo(armDir * 13, shoulderY + 5);
-        ctx.moveTo(0, shoulderY);
-        ctx.lineTo(-armDir * 11, shoulderY + 4);
-      }
-      ctx.strokeStyle = '#d4ecec';
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
-
-      // Ноги
-      if (!sitting) {
-        ctx.beginPath();
-        ctx.moveTo(0, legOffsetY);
-        ctx.lineTo(-8, legOffsetY + 16);
-        ctx.moveTo(0, legOffsetY);
-        ctx.lineTo(8, legOffsetY + 16);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(0, legOffsetY);
-        ctx.lineTo(10, legOffsetY + 8);
-        ctx.moveTo(0, legOffsetY);
-        ctx.lineTo(-10, legOffsetY + 7);
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    }
-
-    // Рисование машины
-    function drawCar(x, y, alpha = 1) {
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = '#b0d0d0';
-      ctx.fillStyle = '#1e3a3f';
-      ctx.lineWidth = 2;
-
-      // Кузов
-      ctx.fillStyle = '#1c3238';
-      ctx.beginPath();
-      ctx.rect(x - car.width/2, y - car.height/2, car.width, car.height);
-      ctx.fill();
-      ctx.strokeStyle = '#78b8b8';
-      ctx.stroke();
-
-      // Окна
-      ctx.fillStyle = '#3a5a62';
-      ctx.beginPath();
-      ctx.rect(x - 10, y - car.height/2 - 1, 14, 9);
-      ctx.fill();
-      ctx.strokeStyle = '#9acccc';
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.rect(x + 8, y - car.height/2 - 1, 10, 9);
-      ctx.fill();
-      ctx.stroke();
-
-      // Колеса
-      ctx.fillStyle = '#0a1a1a';
-      ctx.strokeStyle = '#c0e0e0';
-      ctx.beginPath();
-      ctx.arc(x - 14, y + car.height/2 - 2, car.wheelRadius, 0, 2*Math.PI);
-      ctx.fill();
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(x + 14, y + car.height/2 - 2, car.wheelRadius, 0, 2*Math.PI);
-      ctx.fill();
-      ctx.stroke();
-      
-      ctx.restore();
-    }
-
-    // Очистка и отрисовка сцены
-    function drawScene(scene, prog) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Рисуем землю
-      ctx.beginPath();
-      ctx.strokeStyle = '#2d5a5a';
-      ctx.lineWidth = 1.2;
-      ctx.moveTo(0, 100);
-      ctx.lineTo(canvas.width, 100);
-      ctx.stroke();
-
-      if (scene === 'idle') {
-        drawStickPerson(leftPerson.baseX, leftPerson.groundY, { mirror: false });
-        drawStickPerson(rightPerson.baseX, rightPerson.groundY, { mirror: true });
-        statusDiv.textContent = 'Мы всегда рядом, даже когда далеко 🌲';
-      }
-      else if (scene === 'hugging') {
-        const hugProgress = Math.min(prog, 1);
-        const leftX = leftPerson.baseX + 10 * hugProgress;
-        const rightX = rightPerson.baseX - 10 * hugProgress;
-        
-        drawStickPerson(leftX, leftPerson.groundY, { armsUp: true, mirror: false });
-        drawStickPerson(rightX, rightPerson.groundY, { armsUp: true, mirror: true });
-        
-        if (hugProgress > 0.7) {
-          statusDiv.textContent = 'Крепкие объятия сквозь расстояние ✨';
-        } else {
-          statusDiv.textContent = 'Я тебя обнимаю...';
-        }
-      }
-      else if (scene === 'carLeaving') {
-        const leaveProgress = Math.min(prog, 1);
-        
-        if (leaveProgress < 0.5) {
-          const subProgress = leaveProgress / 0.5;
-          
-          drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { 
-            armsUp: false, 
-            mirror: false 
-          });
-          ctx.save();
-          ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
-          ctx.beginPath();
-          ctx.moveTo(0, -12);
-          ctx.lineTo(-16, -22);
-          ctx.strokeStyle = '#d4ecec';
-          ctx.lineWidth = 2.2;
-          ctx.stroke();
-          ctx.restore();
-
-          const targetX = rightPerson.baseX + (car.x - 15 - rightPerson.baseX) * subProgress;
-          drawStickPerson(targetX, rightPerson.groundY, { mirror: true, sitting: false });
-          
-          drawCar(car.x, car.y);
-          statusDiv.textContent = 'Пора ехать... но я с тобой 💙';
-        } 
-        else {
-          const subProgress2 = (leaveProgress - 0.5) / 0.5;
-          
-          drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { mirror: false });
-          ctx.save();
-          ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
-          ctx.beginPath();
-          ctx.moveTo(0, -12);
-          ctx.lineTo(-18, -24);
-          ctx.strokeStyle = '#d4ecec';
-          ctx.lineWidth = 2.2;
-          ctx.stroke();
-          ctx.restore();
-
-          const carStartX = car.x;
-          const carEndX = canvas.width + 40;
-          const currentCarX = carStartX + (carEndX - carStartX) * subProgress2;
-          
-          drawCar(currentCarX, car.y);
-          drawStickPerson(currentCarX - 8, car.y - 8, { inCar: true });
-          
-          if (subProgress2 > 0.8) {
-            statusDiv.textContent = 'До встречи, родная. Луна светит нам обеим 🌕';
-          } else {
-            statusDiv.textContent = 'Машина увозит, но дружба остаётся...';
-          }
-        }
-      }
-      else if (scene === 'complete') {
-        drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { mirror: false });
+      // рисование палочного человечка
+      function drawStickPerson(x, y, scale = 1, color = COLORS.stickLight, lineWidth = 2.5) {
         ctx.save();
-        ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // голова
         ctx.beginPath();
-        ctx.moveTo(0, -12);
-        ctx.lineTo(-18, -26);
-        ctx.strokeStyle = '#d4ecec';
-        ctx.lineWidth = 2.2;
+        ctx.arc(0, -18, 8, 0, Math.PI * 2);
+        ctx.stroke();
+        // тело
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(0, 22);
+        ctx.stroke();
+        // ноги
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(-10, 38);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(10, 38);
+        ctx.stroke();
+        // руки
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(-12, 12);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(12, 12);
+        ctx.stroke();
+
+        // глаза и улыбка (точки)
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(-3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        // улыбка
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.3;
+        ctx.arc(0, -16, 4, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // машущая рука (поднята)
+      function drawWavingPerson(x, y, scale = 1, color = COLORS.stickLight, waveArm = 'right') {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+
+        // голова
+        ctx.beginPath();
+        ctx.arc(0, -18, 8, 0, Math.PI*2);
+        ctx.stroke();
+        // тело
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(0, 22);
+        ctx.stroke();
+        // ноги
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(-10, 38);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(10, 38);
+        ctx.stroke();
+
+        // левая рука обычная
+        ctx.beginPath();
+        ctx.moveTo(0, -2);
+        ctx.lineTo(-12, 12);
+        ctx.stroke();
+
+        // правая машет (вверх)
+        if (waveArm === 'right') {
+          ctx.beginPath();
+          ctx.moveTo(0, -2);
+          ctx.lineTo(14, -16);
+          ctx.stroke();
+          // кисть
+          ctx.beginPath();
+          ctx.arc(14, -16, 2.2, 0, Math.PI*2);
+          ctx.stroke();
+        } else {
+          // левая машет
+          ctx.beginPath();
+          ctx.moveTo(0, -2);
+          ctx.lineTo(-14, -16);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(-14, -16, 2.2, 0, Math.PI*2);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(-3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(3, -20, 1.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.3;
+        ctx.arc(0, -16, 4, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // машинка простенькая
+      function drawCar(x, y, scale = 1, color = COLORS.carColor) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.fillStyle = color;
+        ctx.strokeStyle = COLORS.stickBlue;
+        ctx.lineWidth = 1.8;
+
+        // кузов
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.rect(-22, -12, 44, 16);
+        ctx.fill();
+        ctx.stroke();
+        // крыша
+        ctx.fillStyle = '#1f4655';
+        ctx.beginPath();
+        ctx.moveTo(-10, -12);
+        ctx.lineTo(-4, -22);
+        ctx.lineTo(12, -22);
+        ctx.lineTo(18, -12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // окна
+        ctx.fillStyle = '#b5e0f0';
+        ctx.beginPath();
+        ctx.moveTo(-7, -12);
+        ctx.lineTo(-2, -20);
+        ctx.lineTo(5, -20);
+        ctx.lineTo(5, -12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(7, -12);
+        ctx.lineTo(7, -20);
+        ctx.lineTo(14, -12);
+        ctx.closePath();
+        ctx.fill();
+
+        // колеса
+        ctx.fillStyle = '#0d0f14';
+        ctx.beginPath();
+        ctx.arc(-13, 6, 5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#b6cfdd';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(13, 6, 5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // автобус
+      function drawBus(x, y, scale = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.fillStyle = COLORS.busColor;
+        ctx.strokeStyle = '#b3dff0';
+        ctx.lineWidth = 1.8;
+        // кузов
+        ctx.fillStyle = COLORS.busColor;
+        ctx.beginPath();
+        ctx.rect(-35, -16, 70, 22);
+        ctx.fill();
+        ctx.stroke();
+        // окна
+        ctx.fillStyle = '#c1e7f5';
+        for (let i = -25; i <= 15; i += 14) {
+          ctx.beginPath();
+          ctx.rect(i, -13, 10, 9);
+          ctx.fill();
+          ctx.strokeStyle = '#204b57';
+          ctx.stroke();
+        }
+        // колеса
+        ctx.fillStyle = '#0b1219';
+        ctx.beginPath();
+        ctx.arc(-20, 8, 6, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#c5dee8';
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(20, 8, 6, 0, Math.PI*2);
+        ctx.fill();
         ctx.stroke();
         ctx.restore();
-        
-        drawCar(canvas.width - 15, car.y + 2, 0.7);
-        drawStickPerson(canvas.width - 23, car.y - 6, { inCar: true });
-        statusDiv.textContent = 'Ты уехала, но наша луна одна на двоих 🌖';
       }
-    }
-      // Запуск анимации сцены
-      function runSceneAnimation(scene, duration = 2000, onComplete) {
-        stopAnimation();
-        const startTime = performance.now();
-        
-        function step(now) {
-          const elapsed = now - startTime;
-          const prog = Math.min(elapsed / duration, 1);
-          
-          drawScene(scene, prog);
-          
-          if (prog < 1) {
-            animationId = requestAnimationFrame(step);
-          } else {
-            if (scene === 'hugging') {
-              stopAnimation();
-              if (onComplete) onComplete();
-            } else if (scene === 'carLeaving') {
-              stopAnimation();
-              currentScene = 'complete';
-              drawScene('complete', 1);
-              if (onComplete) onComplete();
-            } else {
-              stopAnimation();
-              if (onComplete) onComplete();
-            }
-          }
+
+      // речка и пловцы
+      function drawRiverScene() {
+        clearCanvas();
+        const w = canvas.width;
+        const h = canvas.height;
+        // вода
+        ctx.fillStyle = '#0f3b4b';
+        ctx.fillRect(0, h*0.35, w, h*0.65);
+        // берег
+        ctx.fillStyle = '#1e3b2f';
+        ctx.fillRect(0, h*0.55, w, h*0.2);
+        // волны
+        ctx.fillStyle = '#3b8b9c';
+        for (let i=0; i<8; i++) {
+          ctx.beginPath();
+          ctx.arc(40 + i*60, h*0.5, 14, 0, Math.PI);
+          ctx.fill();
         }
-        
-        animationId = requestAnimationFrame(step);
+        // люди купаются
+        drawStickPerson(w*0.2, h*0.65, 0.9, '#d6f0ff');
+        drawStickPerson(w*0.35, h*0.7, 0.9, '#f5e9b8');
+        drawStickPerson(w*0.55, h*0.66, 0.85, '#b8e2f2');
+        drawStickPerson(w*0.7, h*0.72, 0.9, '#fceea7');
+        // веселье: брызги
+        ctx.fillStyle = '#a3dae8';
+        for (let i=0; i<5; i++) {
+          ctx.beginPath();
+          ctx.arc(w*0.3 + i*12, h*0.48, 2, 0, Math.PI*2);
+          ctx.fill();
+        }
       }
 
-      // Основная история: объятия -> машина уезжает
-      function startFullStory() {
-        stopAnimation();
-        currentScene = 'idle';
-        drawScene('idle', 0);
-        
-        runSceneAnimation('hugging', 2200, () => {
-          currentScene = 'carLeaving';
-          runSceneAnimation('carLeaving', 3800, () => {
-            currentScene = 'complete';
-            drawScene('complete', 1);
-          });
-        });
+      // ---------- СЦЕНАРИЙ ----------
+      function setMessage(text, sub = '') {
+        messageEl.style.opacity = '1';
+        messageEl.textContent = text;
+        subEl.textContent = sub;
       }
 
-      // Привязка кнопок
-      document.getElementById('hugBtn').addEventListener('click', () => {
-        stopAnimation();
-        startFullStory();
+      function fadeMessage() {
+        messageEl.style.opacity = '0';
+      }
+
+      async function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function overlayDarkenAndLighten(darkDuration = 1200, pauseDark = 600) {
+        darkOverlay.classList.add('active');
+        await delay(darkDuration);
+        // пока темно
+        await delay(pauseDark);
+        darkOverlay.classList.remove('active');
+        await delay(800);
+      }
+
+      // главная последовательность
+      async function runMovie() {
+        resizeCanvas();
+        clearCanvas();
+        subEl.textContent = '';
+        messageEl.style.opacity = '1';
+
+        // 1. Привет Кира
+        setMessage('Привет, Кира ✦');
+        await delay(5000);
+        fadeMessage();
+        await delay(800);
+
+        // 2. Текст ценности
+        setMessage('Мы тебя очень ценим и надеемся, что ты не грустишь из-за этого.');
+        await delay(10000);
+        fadeMessage();
+        await delay(700);
+
+        // 3. Три человечка обнимаются
+        clearCanvas();
+        messageEl.style.opacity = '0';
+        const w = canvas.width, h = canvas.height;
+        drawStickPerson(w*0.25, h*0.65, 0.95, '#b3e5f5');
+        drawStickPerson(w*0.5, h*0.65, 0.95, '#f5e56c');
+        drawStickPerson(w*0.75, h*0.65, 0.95, '#7fcde1');
+        setMessage('', '');
+        await delay(2500);
+        // один отходит и уезжает
+        clearCanvas();
+        // два человека слева, один справа
+        drawStickPerson(w*0.2, h*0.7, 0.9, '#b3e5f5');
+        drawStickPerson(w*0.4, h*0.7, 0.9, '#f5e56c');
+        drawStickPerson(w*0.75, h*0.68, 0.9, '#7fcde1');
+        await delay(1500);
+        // появляется машина и третий уезжает
+        clearCanvas();
+        drawCar(w*0.7, h*0.58, 0.9);
+        drawStickPerson(w*0.82, h*0.65, 0.8, '#7fcde1'); // внутри
+        drawWavingPerson(w*0.25, h*0.7, 0.9, '#b3e5f5', 'right');
+        drawWavingPerson(w*0.45, h*0.7, 0.9, '#f5e56c', 'right');
+        await delay(3000);
+        
+        // надпись "мы всегда будем помнить о тебе"
+        clearCanvas();
+        drawWavingPerson(w*0.3, h*0.7, 0.85, '#b3e5f5', 'right');
+        drawWavingPerson(w*0.6, h*0.7, 0.85, '#f5e56c', 'right');
+        setMessage('мы всегда будем помнить о тебе');
+        await delay(4500);
+        fadeMessage();
+        
+        // надпись "минифильм"
+        setMessage('минифильм ✦', '');
+        await delay(2500);
+        
+        // затемнение экрана
+        await overlayDarkenAndLighten(1300, 400);
+
+        // 4. Остановка, 4 человечка
+        clearCanvas();
+        messageEl.style.opacity = '0';
+        // скамейка остановки
+        ctx.fillStyle = '#2f4b59';
+        ctx.fillRect(w*0.15, h*0.68, w*0.7, 8);
+        drawStickPerson(w*0.2, h*0.62, 0.8, '#bee2f0');
+        drawStickPerson(w*0.37, h*0.63, 0.8, '#f7e583');
+        drawStickPerson(w*0.55, h*0.61, 0.8, '#8dcfe0');
+        drawStickPerson(w*0.72, h*0.63, 0.8, '#ebd879');
+        // диалог появляется как сообщение
+        setMessage('«Где будем в ГЗ гулять?»', '');
+        await delay(3000);
+        setMessage('«Может купаться на речку сходим?»', '');
+        await delay(3500);
+        setMessage('(все кивнули и сказали «да»)');
+        await delay(2000);
+        
+        // подъезжает автобус
+        clearCanvas();
+        drawBus(w*0.5, h*0.48, 0.9);
+        drawStickPerson(w*0.25, h*0.65, 0.75, '#bee2f0');
+        drawStickPerson(w*0.43, h*0.66, 0.75, '#f7e583');
+        drawStickPerson(w*0.58, h*0.64, 0.75, '#8dcfe0');
+        drawStickPerson(w*0.72, h*0.66, 0.75, '#ebd879');
+        await delay(2500);
+        setMessage('Все сели в автобус ✦');
+        await delay(2000);
+        
+        // затемнение
+        await overlayDarkenAndLighten(1200, 500);
+        
+        // 5. Купание в речке
+        drawRiverScene();
+        setMessage('', '');
+        await delay(1200);
+        setMessage('Мы очень дорожим тобой, Кира ✦', '');
+        // дополнительно можно оставить
+        await delay(7000);
+        
+        // финал: надпись остается, фон чуть мягче
+        setMessage('Мы очень дорожим тобой, Кира ✦', 'навсегда в памяти');
+      }
+
+      // старт после загрузки
+      window.addEventListener('load', () => {
+        resizeCanvas();
+        runMovie().catch(e => console.error('сценарий прерван', e));
       });
 
-      document.getElementById('replayBtn').addEventListener('click', () => {
-        stopAnimation();
-        currentScene = 'idle';
-        drawScene('idle', 0);
-        statusDiv.textContent = 'Ты в моём сердце, даже за тысячи километров 🌙';
-      });
-
-      // Инициализация
-      drawScene('idle', 0);
-      statusDiv.textContent = 'Ты в моём сердце, даже за тысячи километров 🌙';
-
-      // Очистка при уходе со страницы
-      window.addEventListener('beforeunload', () => {
-        stopAnimation();
-      });
     })();
   </script>
 </body>
