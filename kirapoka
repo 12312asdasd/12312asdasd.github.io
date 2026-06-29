@@ -284,3 +284,339 @@
       <div class="caption">палочки, но тепло</div>
     </div>
   </div>
+<script>
+  (function() {
+    const canvas = document.getElementById('storyCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Элементы для сообщений
+    const statusDiv = document.getElementById('statusMessage');
+
+    // Состояния анимации
+    let animationId = null;
+    let currentScene = 'idle'; // idle, hugging, carLeaving, complete
+    let progress = 0; // 0 до 1
+
+    // Параметры фигур (палочные человечки)
+    const leftPerson = { baseX: 105, groundY: 90 };
+    const rightPerson = { baseX: 175, groundY: 90 };
+
+    // Машина (упрощённая)
+    const car = {
+      x: 240,
+      y: 70,
+      width: 48,
+      height: 22,
+      wheelRadius: 6,
+    };
+
+    // Функция остановки анимации
+    function stopAnimation() {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    }
+
+    // Рисование палочного человека
+    function drawStickPerson(x, y, options = {}) {
+      const {
+        armsUp = false,
+        armAngleOffset = 0,
+        lean = 0,
+        mirror = false,
+        sitting = false,
+        inCar = false
+      } = options;
+
+      ctx.save();
+      ctx.translate(x, y);
+      
+      if (inCar) {
+        // Голова
+        ctx.beginPath();
+        ctx.arc(0, -22, 6, 0, Math.PI * 2);
+        ctx.strokeStyle = '#e0f0f0';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+        // тело короткое
+        ctx.beginPath();
+        ctx.moveTo(0, -16);
+        ctx.lineTo(0, -2);
+        ctx.stroke();
+        ctx.restore();
+        return;
+      }
+
+      const bodyLength = sitting ? 13 : 18;
+      const legOffsetY = sitting ? 5 : 0;
+
+      // Голова
+      ctx.beginPath();
+      ctx.arc(0, -bodyLength - 2, 6, 0, Math.PI * 2);
+      ctx.strokeStyle = '#d4ecec';
+      ctx.lineWidth = 2.4;
+      ctx.stroke();
+
+      // Тело
+      ctx.beginPath();
+      ctx.moveTo(0, -bodyLength + 4);
+      ctx.lineTo(0, legOffsetY);
+      ctx.stroke();
+
+      // Руки
+      const shoulderY = -bodyLength + 6;
+      ctx.beginPath();
+      if (armsUp) {
+        ctx.moveTo(0, shoulderY);
+        ctx.lineTo(-14, shoulderY - 12);
+        ctx.moveTo(0, shoulderY);
+        ctx.lineTo(14, shoulderY - 12);
+      } else {
+        const armDir = mirror ? -1 : 1;
+        ctx.moveTo(0, shoulderY);
+        ctx.lineTo(armDir * 13, shoulderY + 5);
+        ctx.moveTo(0, shoulderY);
+        ctx.lineTo(-armDir * 11, shoulderY + 4);
+      }
+      ctx.strokeStyle = '#d4ecec';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+
+      // Ноги
+      if (!sitting) {
+        ctx.beginPath();
+        ctx.moveTo(0, legOffsetY);
+        ctx.lineTo(-8, legOffsetY + 16);
+        ctx.moveTo(0, legOffsetY);
+        ctx.lineTo(8, legOffsetY + 16);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(0, legOffsetY);
+        ctx.lineTo(10, legOffsetY + 8);
+        ctx.moveTo(0, legOffsetY);
+        ctx.lineTo(-10, legOffsetY + 7);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    // Рисование машины
+    function drawCar(x, y, alpha = 1) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = '#b0d0d0';
+      ctx.fillStyle = '#1e3a3f';
+      ctx.lineWidth = 2;
+
+      // Кузов
+      ctx.fillStyle = '#1c3238';
+      ctx.beginPath();
+      ctx.rect(x - car.width/2, y - car.height/2, car.width, car.height);
+      ctx.fill();
+      ctx.strokeStyle = '#78b8b8';
+      ctx.stroke();
+
+      // Окна
+      ctx.fillStyle = '#3a5a62';
+      ctx.beginPath();
+      ctx.rect(x - 10, y - car.height/2 - 1, 14, 9);
+      ctx.fill();
+      ctx.strokeStyle = '#9acccc';
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.rect(x + 8, y - car.height/2 - 1, 10, 9);
+      ctx.fill();
+      ctx.stroke();
+
+      // Колеса
+      ctx.fillStyle = '#0a1a1a';
+      ctx.strokeStyle = '#c0e0e0';
+      ctx.beginPath();
+      ctx.arc(x - 14, y + car.height/2 - 2, car.wheelRadius, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x + 14, y + car.height/2 - 2, car.wheelRadius, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.restore();
+    }
+
+    // Очистка и отрисовка сцены
+    function drawScene(scene, prog) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Рисуем землю
+      ctx.beginPath();
+      ctx.strokeStyle = '#2d5a5a';
+      ctx.lineWidth = 1.2;
+      ctx.moveTo(0, 100);
+      ctx.lineTo(canvas.width, 100);
+      ctx.stroke();
+
+      if (scene === 'idle') {
+        drawStickPerson(leftPerson.baseX, leftPerson.groundY, { mirror: false });
+        drawStickPerson(rightPerson.baseX, rightPerson.groundY, { mirror: true });
+        statusDiv.textContent = 'Мы всегда рядом, даже когда далеко 🌲';
+      }
+      else if (scene === 'hugging') {
+        const hugProgress = Math.min(prog, 1);
+        const leftX = leftPerson.baseX + 10 * hugProgress;
+        const rightX = rightPerson.baseX - 10 * hugProgress;
+        
+        drawStickPerson(leftX, leftPerson.groundY, { armsUp: true, mirror: false });
+        drawStickPerson(rightX, rightPerson.groundY, { armsUp: true, mirror: true });
+        
+        if (hugProgress > 0.7) {
+          statusDiv.textContent = 'Крепкие объятия сквозь расстояние ✨';
+        } else {
+          statusDiv.textContent = 'Я тебя обнимаю...';
+        }
+      }
+      else if (scene === 'carLeaving') {
+        const leaveProgress = Math.min(prog, 1);
+        
+        if (leaveProgress < 0.5) {
+          const subProgress = leaveProgress / 0.5;
+          
+          drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { 
+            armsUp: false, 
+            mirror: false 
+          });
+          ctx.save();
+          ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
+          ctx.beginPath();
+          ctx.moveTo(0, -12);
+          ctx.lineTo(-16, -22);
+          ctx.strokeStyle = '#d4ecec';
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+          ctx.restore();
+
+          const targetX = rightPerson.baseX + (car.x - 15 - rightPerson.baseX) * subProgress;
+          drawStickPerson(targetX, rightPerson.groundY, { mirror: true, sitting: false });
+          
+          drawCar(car.x, car.y);
+          statusDiv.textContent = 'Пора ехать... но я с тобой 💙';
+        } 
+        else {
+          const subProgress2 = (leaveProgress - 0.5) / 0.5;
+          
+          drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { mirror: false });
+          ctx.save();
+          ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
+          ctx.beginPath();
+          ctx.moveTo(0, -12);
+          ctx.lineTo(-18, -24);
+          ctx.strokeStyle = '#d4ecec';
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+          ctx.restore();
+
+          const carStartX = car.x;
+          const carEndX = canvas.width + 40;
+          const currentCarX = carStartX + (carEndX - carStartX) * subProgress2;
+          
+          drawCar(currentCarX, car.y);
+          drawStickPerson(currentCarX - 8, car.y - 8, { inCar: true });
+          
+          if (subProgress2 > 0.8) {
+            statusDiv.textContent = 'До встречи, родная. Луна светит нам обеим 🌕';
+          } else {
+            statusDiv.textContent = 'Машина увозит, но дружба остаётся...';
+          }
+        }
+      }
+      else if (scene === 'complete') {
+        drawStickPerson(leftPerson.baseX - 2, leftPerson.groundY, { mirror: false });
+        ctx.save();
+        ctx.translate(leftPerson.baseX - 2, leftPerson.groundY);
+        ctx.beginPath();
+        ctx.moveTo(0, -12);
+        ctx.lineTo(-18, -26);
+        ctx.strokeStyle = '#d4ecec';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+        ctx.restore();
+        
+        drawCar(canvas.width - 15, car.y + 2, 0.7);
+        drawStickPerson(canvas.width - 23, car.y - 6, { inCar: true });
+        statusDiv.textContent = 'Ты уехала, но наша луна одна на двоих 🌖';
+      }
+    }
+      // Запуск анимации сцены
+      function runSceneAnimation(scene, duration = 2000, onComplete) {
+        stopAnimation();
+        const startTime = performance.now();
+        
+        function step(now) {
+          const elapsed = now - startTime;
+          const prog = Math.min(elapsed / duration, 1);
+          
+          drawScene(scene, prog);
+          
+          if (prog < 1) {
+            animationId = requestAnimationFrame(step);
+          } else {
+            if (scene === 'hugging') {
+              stopAnimation();
+              if (onComplete) onComplete();
+            } else if (scene === 'carLeaving') {
+              stopAnimation();
+              currentScene = 'complete';
+              drawScene('complete', 1);
+              if (onComplete) onComplete();
+            } else {
+              stopAnimation();
+              if (onComplete) onComplete();
+            }
+          }
+        }
+        
+        animationId = requestAnimationFrame(step);
+      }
+
+      // Основная история: объятия -> машина уезжает
+      function startFullStory() {
+        stopAnimation();
+        currentScene = 'idle';
+        drawScene('idle', 0);
+        
+        runSceneAnimation('hugging', 2200, () => {
+          currentScene = 'carLeaving';
+          runSceneAnimation('carLeaving', 3800, () => {
+            currentScene = 'complete';
+            drawScene('complete', 1);
+          });
+        });
+      }
+
+      // Привязка кнопок
+      document.getElementById('hugBtn').addEventListener('click', () => {
+        stopAnimation();
+        startFullStory();
+      });
+
+      document.getElementById('replayBtn').addEventListener('click', () => {
+        stopAnimation();
+        currentScene = 'idle';
+        drawScene('idle', 0);
+        statusDiv.textContent = 'Ты в моём сердце, даже за тысячи километров 🌙';
+      });
+
+      // Инициализация
+      drawScene('idle', 0);
+      statusDiv.textContent = 'Ты в моём сердце, даже за тысячи километров 🌙';
+
+      // Очистка при уходе со страницы
+      window.addEventListener('beforeunload', () => {
+        stopAnimation();
+      });
+    })();
+  </script>
+</body>
+</html>
