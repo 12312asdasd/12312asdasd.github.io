@@ -3,31 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>snowwer shop</title>
-    <!-- Подключаем зимний шрифт -->
+    <title>snowwer shop – зимняя версия</title>
     <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
     <style>
-        /* === Глобальные настройки === */
+        /* Глобальные сбросы */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             min-height: 100vh;
-            background: black; /* полностью чёрный фон */
+            background: #0b0d17; /* тёмно-синий, почти чёрный */
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Pirata One', serif;
-            color: white;
-            overflow: hidden; /* убираем скролл при появлении окон */
+            color: #f0f5ff;
+            overflow: hidden; /* чтобы снежинки не вызывали скролл */
+            position: relative;
         }
 
-        /* === Главный контейнер === */
+        /* Плавающие снежинки (зимний фон) */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* не мешает кликам */
+            z-index: 0;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            animation: fall linear infinite;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Центральный контейнер (поверх снежинок) */
         .app {
             position: relative;
+            z-index: 1;
             width: 100%;
             max-width: 600px;
             min-height: 400px;
@@ -38,88 +63,83 @@
             padding: 30px 20px;
         }
 
-        /* === Заголовок "snowwer shop" === */
         .main-title {
-            font-size: 3.5rem;
-            letter-spacing: 6px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            font-size: 3.8rem;
+            letter-spacing: 8px;
+            text-shadow: 0 0 30px rgba(200, 220, 255, 0.3);
             margin-bottom: 40px;
+            background: linear-gradient(135deg, #e0f0ff, #b0d0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent; /* эффект "инее" */
         }
 
-        /* === Меню с тремя главными кнопками === */
+        /* Меню */
         .main-menu {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .main-btn {
-            width: 150px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: white;
+            width: 160px;
+            height: 85px;
+            background: rgba(200, 220, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: #eef5ff;
             font-family: 'Pirata One', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            padding: 0 15px;
         }
-
         .main-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
-            transform: scale(0.97);
+            background: rgba(200, 230, 255, 0.2);
+            transform: scale(0.96);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* === Общие стили для всплывающих окон (overlay) === */
+        /* Overlay */
         .overlay {
-            display: none; /* скрыты по умолчанию */
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 10, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 200;
         }
+        .overlay.active { display: flex; }
 
-        .overlay.active {
-            display: flex;
-        }
-
-        /* === Окна (панели) === */
         .panel {
-            background: rgba(10, 10, 20, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
             padding: 30px 25px;
             max-width: 420px;
-            width: 90%;
+                        width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            color: white;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            color: #eef5ff;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         }
 
         .panel h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             text-align: center;
             margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 15px rgba(180, 210, 255, 0.3);
         }
 
         .panel p {
@@ -131,67 +151,61 @@
 
         .panel .price {
             font-size: 1.3rem;
-            color: #aad0ff;
+            color: #ffd700;
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
         }
 
-        /* === Кнопки внутри панелей === */
         .panel-btn {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-                        backdrop-filter: blur(5px);
+            background: rgba(200, 220, 255, 0.1);
+            backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 10px;
-            padding: 10px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 10px 28px;
             font-family: 'Pirata One', serif;
             font-size: 1.2rem;
-            color: white;
+            color: #eef5ff;
             cursor: pointer;
             transition: all 0.2s;
-            margin: 5px;
+            margin: 6px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
         }
-
         .panel-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(0.95);
+            background: rgba(200, 230, 255, 0.2);
+            transform: scale(0.94);
         }
-
         .panel-btn.back {
-            background: rgba(180, 0, 0, 0.2);
-            border-color: rgba(255, 80, 80, 0.4);
+            background: rgba(180, 50, 50, 0.2);
+            border-color: rgba(255, 100, 100, 0.3);
         }
-
         .panel-btn.back:hover {
-            background: rgba(180, 0, 0, 0.4);
+            background: rgba(180, 50, 50, 0.35);
         }
 
-        /* === Сетка для квадратов услуг (2 или 3 колонки) === */
+        /* Сетка услуг */
         .services-grid {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 20px;
-            justify-content: center;
             margin-top: 20px;
         }
 
         .service-card {
-            background: rgba(20, 30, 50, 0.6);
+            background: rgba(20, 30, 60, 0.5);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
             padding: 20px 15px;
             text-align: center;
-            min-width: 140px;
-            flex: 1 1 130px;
             transition: 0.2s;
+            min-width: 0; /* чтобы не ломался grid */
         }
-
         .service-card h3 {
             font-size: 1.4rem;
             margin-bottom: 8px;
         }
-
         .service-card .price {
             font-size: 1.2rem;
             color: #ffd700;
@@ -199,177 +213,171 @@
             margin-bottom: 12px;
         }
 
-        .service-card .panel-btn {
-            padding: 8px 20px;
-        }
-
-        /* === Адаптация под маленькие экраны === */
-        @media (max-width: 500px) {
+        /* Адаптация под маленькие экраны */
+        @media (max-width: 480px) {
             .main-title {
-                font-size: 2.5rem;
+                font-size: 2.6rem;
                 margin-bottom: 30px;
             }
             .main-btn {
                 width: 130px;
-                height: 65px;
+                height: 70px;
                 font-size: 1rem;
+                white-space: normal; /* перенос слов, если нужно */
             }
             .panel {
                 padding: 20px 15px;
             }
-            .service-card {
-                min-width: 120px;
+            .services-grid {
+                grid-template-columns: 1fr; /* на очень узких – один столбец */
             }
         }
     </style>
 </head>
 <body>
+    <!-- Снежинки (зимний фон) -->
+    <div class="snowflakes" id="snowflakes"></div>
 
-<div class="app">
-    <h1 class="main-title">snowwer shop</h1>
-
-    <div class="main-menu">
-        <button class="main-btn" onclick="openMainMenu('services')">поиск информации людей</button>
-        <button class="main-btn" onclick="showError()">табачка</button>
-        <button class="main-btn" onclick="openMainMenu('signs')">сигны</button>
+    <div class="app">
+        <h1 class="main-title">snowwer shop</h1>
+        <div class="main-menu">
+            <button class="main-btn" onclick="openMainMenu('services')">поиск информации людей</button>
+            <button class="main-btn" onclick="showError()">табачка</button>
+            <button class="main-btn" onclick="openMainMenu('signs')">сигны</button>
+        </div>
     </div>
-</div>
 
-<!-- Overlay для всплывающих окон -->
-<div id="overlay" class="overlay">
-    <div id="panelContent" class="panel">
-        <!-- Сюда будет вставляться динамический контент -->
+    <!-- Overlay -->
+    <div id="overlay" class="overlay">
+        <div id="panelContent" class="panel"></div>
     </div>
-</div>
 
-<script>
-    // === Глобальные переменные ===
-    const overlay = document.getElementById('overlay');
-    const panelContent = document.getElementById('panelContent');
-    let currentView = 'main'; // main, services, signs, details, etc.
-    let servicesAdded = false; // была ли добавлена услуга "поиск информации" после возврата
-
-    // === Функции управления окнами ===
-    function showPanel(html) {
-        panelContent.innerHTML = html;
-        overlay.classList.add('active');
-    }
-
-    function closePanel() {
-        overlay.classList.remove('active');
-        panelContent.innerHTML = '';
-        currentView = 'main';
-    }
-
-    // === Главная кнопка "назад" (общая) ===
-    function goBack() {
-        closePanel();
-        // После возврата из меню "поиск информации людей" добавляем вторую услугу
-        if (currentView === 'services' && !servicesAdded) {
-            servicesAdded = true;
-            // Ничего дополнительно не делаем, услуга будет показана при следующем открытии
-        }
-    }
-
-    // === Обработчик "табачка" (ошибка) ===
-    function showError() {
-        showPanel(`
-            <h2>❌ Ошибка</h2>
-            <p style="font-size:1.5rem;">товаров нету в наличии.</p>
-                        <button class="panel-btn back" onclick="closePanel()">Назад</button>
-        `);
-    }
-
-    // === Открыть главное меню "поиск информации людей" или "сигны" ===
-    function openMainMenu(type) {
-        currentView = type;
-        if (type === 'services') {
-            let servicesHtml = `
-                <h2>🔍 Поиск информации людей</h2>
-                <div class="services-grid">
-            `;
-            // Первая услуга (снос) доступна всегда
-            servicesHtml += `
-                <div class="service-card">
-                    <h3>снос аккаунта</h3>
-                    <span class="price">250р</span>
-                    <button class="panel-btn" onclick="openServiceDetails('snos')">купить</button>
-                </div>
-            `;
-            // Вторая услуга (поиск информации) появляется после первого возврата
-            if (servicesAdded) {
-                servicesHtml += `
-                    <div class="service-card">
-                        <h3>поиск информации</h3>
-                        <span class="price">500р</span>
-                        <button class="panel-btn" onclick="openServiceDetails('search')">купить</button>
-                    </div>
-                `;
+    <script>
+        // === Снежинки: генерация ===
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes');
+            const symbols = ['❄', '❅', '❆', '✦', '•'];
+            for (let i = 0; i < 35; i++) {
+                const span = document.createElement('span');
+                span.className = 'snowflake';
+                                span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                span.style.left = Math.random() * 100 + '%';
+                span.style.fontSize = (0.6 + Math.random() * 1.2) + 'rem';
+                span.style.opacity = 0.5 + Math.random() * 0.5;
+                span.style.animationDuration = (8 + Math.random() * 12) + 's';
+                span.style.animationDelay = (Math.random() * 10) + 's';
+                container.appendChild(span);
             }
-            servicesHtml += `</div><button class="panel-btn back" onclick="goBack()">Назад</button>`;
-            showPanel(servicesHtml);
-        } else if (type === 'signs') {
-            currentView = 'signs';
+        }
+        createSnowflakes();
+
+        // === Логика UI ===
+        const overlay = document.getElementById('overlay');
+        const panelContent = document.getElementById('panelContent');
+        let currentView = 'main';
+
+        function showPanel(html) {
+            panelContent.innerHTML = html;
+            overlay.classList.add('active');
+        }
+
+        function closePanel() {
+            overlay.classList.remove('active');
+            panelContent.innerHTML = '';
+            currentView = 'main';
+        }
+
+        function goBack() {
+            closePanel();
+        }
+
+        // Ошибка табачка
+        function showError() {
             showPanel(`
-                <h2>🎨 Сигны</h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <h3>аниме сигна</h3>
-                        <span class="price">50р</span>
-                        <button class="panel-btn" onclick="openServiceDetails('anime-sign')">купить</button>
-                    </div>
-                    <div class="service-card">
-                        <h3>портрет с человеком</h3>
-                        <span class="price">200р</span>
-                        <button class="panel-btn" onclick="openServiceDetails('portrait')">купить</button>
-                    </div>
-                </div>
+                <h2>❄️ Ошибка</h2>
+                <p style="font-size:1.5rem;">товаров нету в наличии.</p>
                 <button class="panel-btn back" onclick="closePanel()">Назад</button>
             `);
         }
-    }
 
-    // === Открыть подробности услуги ===
-    function openServiceDetails(service) {
-        let html = '';
-        if (service === 'snos') {
-            html = `
-                <h2>📋 Подробности сноса</h2>
-                <p>Не стопроцентный. Вы оплачиваете 250р только тогда, когда аккаунт будет снесен.<br>Время ожидания 1–7 дней.</p>
-                <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
-            `;
-        } else if (service === 'search') {
-            html = `
-                <h2>📋 Подробнее</h2>
-                <p>Поиск данных людей тоже не стопроцентный.<br>Примерный срок исполнения до 3 дней.</p>
-                <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
-            `;
-        } else if (service === 'anime-sign') {
-            html = `
-                <h2>📋 Подробности</h2>
-                <p>Аниме сигна — вы даёте мне название вашего аниме персонажа, фон и текст, который там должен присутствовать. После чего я вам дам итог работы.</p>
-                <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
-            `;
-        } else if (service === 'portrait') {
-            html = `
-                <h2>📋 Подробности</h2>
-                <p>Портрет с человеком — вы даёте мне своё фото в полный рост и фото аниме персонажа / вашей подруги / друга или же любого человека в мире (даже флаттершай, к примеру).</p>
-                <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
-            `;
+        // Главное меню: услуги или сигны
+        function openMainMenu(type) {
+            currentView = type;
+            if (type === 'services') {
+                // Обе услуги доступны сразу – никаких условий
+                showPanel(`
+                    <h2>🔍 Поиск информации людей</h2>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <h3>снос аккаунта</h3>
+                            <span class="price">250р</span>
+                            <button class="panel-btn" onclick="openServiceDetails('snos')">купить</button>
+                        </div>
+                        <div class="service-card">
+                            <h3>поиск информации</h3>
+                            <span class="price">500р</span>
+                            <button class="panel-btn" onclick="openServiceDetails('search')">купить</button>
+                        </div>
+                    </div>
+                    <button class="panel-btn back" onclick="goBack()">Назад</button>
+                `);
+            } else if (type === 'signs') {
+                showPanel(`
+                    <h2>🎨 Сигны</h2>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <h3>аниме сигна</h3>
+                            <span class="price">50р</span>
+                            <button class="panel-btn" onclick="openServiceDetails('anime-sign')">купить</button>
+                        </div>
+                        <div class="service-card">
+                            <h3>портрет с человеком</h3>
+                            <span class="price">200р</span>
+                            <button class="panel-btn" onclick="openServiceDetails('portrait')">купить</button>
+                        </div>
+                    </div>
+                    <button class="panel-btn back" onclick="closePanel()">Назад</button>
+                `);
+            }
         }
-        showPanel(html);
-    }
 
-    // === Закрытие оверлея по клику вне панели ===
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-            closePanel();
+        // Подробности услуги
+        function openServiceDetails(service) {
+            let html = '';
+            if (service === 'snos') {
+                html = `
+                    <h2>📋 Подробности сноса</h2>
+                    <p>Не стопроцентный. Вы оплачиваете 250р только тогда, когда аккаунт будет снесен.<br>Время ожидания 1–7 дней.</p>
+                    <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
+                `;
+            } else if (service === 'search') {
+                html = `
+                    <h2>📋 Подробнее</h2>
+                                        <p>Поиск данных людей тоже не стопроцентный.<br>Примерный срок исполнения до 3 дней.</p>
+                    <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
+                `;
+            } else if (service === 'anime-sign') {
+                html = `
+                    <h2>📋 Подробности</h2>
+                    <p>Аниме сигна — вы даёте мне название вашего аниме персонажа, фон и текст, который там должен присутствовать. После чего я вам дам итог работы.</p>
+                    <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
+                `;
+            } else if (service === 'portrait') {
+                html = `
+                    <h2>📋 Подробности</h2>
+                    <p>Портрет с человеком — вы даёте мне своё фото в полный рост и фото аниме персонажа / вашей подруги / друга или же любого человека в мире (даже флаттершай, к примеру).</p>
+                    <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
+                `;
+            }
+            showPanel(html);
         }
-    });
-        // === Инициализация: услуга "поиск информации" не добавлена до первого возврата ===
-    // При первом открытии "поиск информации людей" она не появится, пока пользователь не нажмёт "назад"
-    // Позже при повторном открытии она будет видна.
-</script>
 
+        // Закрытие оверлея по клику вне панели
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closePanel();
+            }
+        });
+    </script>
 </body>
 </html>
