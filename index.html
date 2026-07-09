@@ -4,314 +4,372 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>snowwer shop</title>
+    <!-- Подключаем зимний шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
     <style>
+        /* === Глобальные настройки === */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
 
         body {
-            background: #000;
-            color: #fff;
             min-height: 100vh;
+            background: black; /* полностью чёрный фон */
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Pirata One', serif;
+            color: white;
+            overflow: hidden; /* убираем скролл при появлении окон */
+        }
+
+        /* === Главный контейнер === */
+        .app {
             position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Основной экран */
-        .main-screen {
-            text-align: center;
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-
-        .main-screen.hidden {
-            display: none;
-        }
-
-        .main-screen h1 {
-            font-size: 3rem;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        .main-buttons {
+            width: 100%;
+            max-width: 600px;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
             align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        /* === Заголовок "snowwer shop" === */
+        .main-title {
+            font-size: 3.5rem;
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 40px;
+        }
+
+        /* === Меню с тремя главными кнопками === */
+        .main-menu {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .main-btn {
-            background: #1a1a1a;
-            color: #fff;
-            border: 1px solid #333;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 10px;
+            width: 150px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Pirata One', serif;
+            font-size: 1.3rem;
             cursor: pointer;
-            width: 300px;
-            max-width: 80vw;
-            transition: background 0.2s, transform 0.1s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
         .main-btn:hover {
-            background: #2a2a2a;
-            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            transform: scale(0.97);
         }
 
-        /* Модальные окна (общие стили) */
-        .modal-overlay {
+        /* === Общие стили для всплывающих окон (overlay) === */
+        .overlay {
+            display: none; /* скрыты по умолчанию */
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
             z-index: 100;
-            backdrop-filter: blur(4px);
         }
 
-        .modal-overlay.active {
+        .overlay.active {
             display: flex;
         }
 
-        .modal {
-            background: #111;
-            border: 1px solid #333;
+        /* === Окна (панели) === */
+        .panel {
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
+            padding: 30px 25px;
+            max-width: 420px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 0 40px rgba(255,255,255,0.05);
-            animation: fadeIn 0.2s ease;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal h2 {
+        .panel h2 {
+            font-size: 2rem;
             text-align: center;
             margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
-        .modal p {
-            line-height: 1.6;
-            font-size: 1rem;
-            margin-bottom: 20px;
+        .panel p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        .service-grid {
+        .panel .price {
+            font-size: 1.3rem;
+            color: #aad0ff;
+        }
+
+        /* === Кнопки внутри панелей === */
+        .panel-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+                        backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-family: 'Pirata One', serif;
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+
+        .panel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0.95);
+        }
+
+        .panel-btn.back {
+            background: rgba(180, 0, 0, 0.2);
+            border-color: rgba(255, 80, 80, 0.4);
+        }
+
+        .panel-btn.back:hover {
+            background: rgba(180, 0, 0, 0.4);
+        }
+
+        /* === Сетка для квадратов услуг (2 или 3 колонки) === */
+        .services-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
+            margin-top: 20px;
         }
 
         .service-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
+            background: rgba(20, 30, 50, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 15px;
-            padding: 20px;
-            width: 200px;
+            padding: 20px 15px;
             text-align: center;
-            transition: background 0.2s;
-        }
-
-        .service-card:hover {
-            background: #222;
+            min-width: 140px;
+            flex: 1 1 130px;
+            transition: 0.2s;
         }
 
         .service-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
         }
 
         .service-card .price {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-            margin: 10px 0;
-        }
-
-        .buy-btn, .back-btn {
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.2s;
-            margin: 5px;
-        }
-
-        .buy-btn:hover, .back-btn:hover {
-                        background: #3a3a3a;
-        }
-
-        .back-btn {
-            background: #333;
-        }
-
-        .error-msg {
-            color: #ff6b6b;
             font-size: 1.2rem;
-            text-align: center;
-            margin: 20px 0;
+            color: #ffd700;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .service-card .panel-btn {
+            padding: 8px 20px;
+        }
+
+        /* === Адаптация под маленькие экраны === */
+        @media (max-width: 500px) {
+            .main-title {
+                font-size: 2.5rem;
+                margin-bottom: 30px;
+            }
+            .main-btn {
+                width: 130px;
+                height: 65px;
+                font-size: 1rem;
+            }
+            .panel {
+                padding: 20px 15px;
+            }
+            .service-card {
+                min-width: 120px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Главный экран -->
-    <div class="main-screen" id="mainScreen">
-        <h1>snowwer shop</h1>
-        <div class="main-buttons">
-            <button class="main-btn" onclick="openModal('peopleServices')">поиск информации людей</button>
-            <button class="main-btn" onclick="openModal('tabachkaError')">табачка</button>
-            <button class="main-btn" onclick="openModal('signyMenu')">сигны</button>
-        </div>
-    </div>
+<div class="app">
+    <h1 class="main-title">snowwer shop</h1>
 
-    <!-- Модальное окно: поиск информации людей (список услуг) -->
-    <div class="modal-overlay" id="peopleServices">
-        <div class="modal">
-            <h2>Услуги поиска</h2>
-            <div class="service-grid">
+    <div class="main-menu">
+        <button class="main-btn" onclick="openMainMenu('services')">поиск информации людей</button>
+        <button class="main-btn" onclick="showError()">табачка</button>
+        <button class="main-btn" onclick="openMainMenu('signs')">сигны</button>
+    </div>
+</div>
+
+<!-- Overlay для всплывающих окон -->
+<div id="overlay" class="overlay">
+    <div id="panelContent" class="panel">
+        <!-- Сюда будет вставляться динамический контент -->
+    </div>
+</div>
+
+<script>
+    // === Глобальные переменные ===
+    const overlay = document.getElementById('overlay');
+    const panelContent = document.getElementById('panelContent');
+    let currentView = 'main'; // main, services, signs, details, etc.
+    let servicesAdded = false; // была ли добавлена услуга "поиск информации" после возврата
+
+    // === Функции управления окнами ===
+    function showPanel(html) {
+        panelContent.innerHTML = html;
+        overlay.classList.add('active');
+    }
+
+    function closePanel() {
+        overlay.classList.remove('active');
+        panelContent.innerHTML = '';
+        currentView = 'main';
+    }
+
+    // === Главная кнопка "назад" (общая) ===
+    function goBack() {
+        closePanel();
+        // После возврата из меню "поиск информации людей" добавляем вторую услугу
+        if (currentView === 'services' && !servicesAdded) {
+            servicesAdded = true;
+            // Ничего дополнительно не делаем, услуга будет показана при следующем открытии
+        }
+    }
+
+    // === Обработчик "табачка" (ошибка) ===
+    function showError() {
+        showPanel(`
+            <h2>❌ Ошибка</h2>
+            <p style="font-size:1.5rem;">товаров нету в наличии.</p>
+                        <button class="panel-btn back" onclick="closePanel()">Назад</button>
+        `);
+    }
+
+    // === Открыть главное меню "поиск информации людей" или "сигны" ===
+    function openMainMenu(type) {
+        currentView = type;
+        if (type === 'services') {
+            let servicesHtml = `
+                <h2>🔍 Поиск информации людей</h2>
+                <div class="services-grid">
+            `;
+            // Первая услуга (снос) доступна всегда
+            servicesHtml += `
                 <div class="service-card">
                     <h3>снос аккаунта</h3>
-                    <div class="price">250₽</div>
-                    <button class="buy-btn" onclick="closeModal('peopleServices'); openModal('snosDetails')">купить</button>
+                    <span class="price">250р</span>
+                    <button class="panel-btn" onclick="openServiceDetails('snos')">купить</button>
                 </div>
-                <div class="service-card">
-                    <h3>поиск информации</h3>
-                    <div class="price">500₽</div>
-                    <button class="buy-btn" onclick="closeModal('peopleServices'); openModal('searchDetails')">купить</button>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="back-btn" onclick="closeModal('peopleServices')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подробности сноса аккаунта -->
-    <div class="modal-overlay" id="snosDetails">
-        <div class="modal">
-            <h2>подробности сноса</h2>
-            <p>Не стопроцентный. Вы оплачиваете 250₽ только тогда, когда аккаунт будет снесен.<br>Время ожидания 1–7 дней.</p>
-            <div style="text-align: right;">
-                <button class="back-btn" onclick="closeModal('snosDetails'); openModal('peopleServices')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подробности поиска информации -->
-    <div class="modal-overlay" id="searchDetails">
-        <div class="modal">
-            <h2>подробнее</h2>
-            <p>Поиск данных людей тоже не стопроцентный, примерный срок исполнения до 3 дней.</p>
-            <div style="text-align: right;">
-                <button class="back-btn" onclick="closeModal('searchDetails'); openModal('peopleServices')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Ошибка "табачка" -->
-    <div class="modal-overlay" id="tabachkaError">
-        <div class="modal">
-            <div class="error-msg">товаров нету в наличии</div>
-            <div style="text-align: center;">
-                <button class="back-btn" onclick="closeModal('tabachkaError')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Меню "сигны" (выбор) -->
-    <div class="modal-overlay" id="signyMenu">
-        <div class="modal">
-            <h2>Сигны</h2>
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>аниме сигна</h3>
-                    <div class="price">50₽</div>
-                    <button class="buy-btn" onclick="closeModal('signyMenu'); openModal('animeSignaDetails')">купить</button>
-                </div>
-                <div class="service-card">
-                    <h3>портрет с человеком</h3>
-                    <div class="price">200₽</div>
-                    <button class="buy-btn" onclick="closeModal('signyMenu'); openModal('portretDetails')">купить</button>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="back-btn" onclick="closeModal('signyMenu')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подробности аниме сигны -->
-        <div class="modal-overlay" id="animeSignaDetails">
-        <div class="modal">
-            <h2>подробности</h2>
-            <p>Аниме сигна — вы даёте мне название вашего аниме персонажа, фон и текст, который там должен присутствовать. После чего я вам дам итог работы.</p>
-            <div style="text-align: right;">
-                <button class="back-btn" onclick="closeModal('animeSignaDetails'); openModal('signyMenu')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подробности портрета с человеком -->
-    <div class="modal-overlay" id="portretDetails">
-        <div class="modal">
-            <h2>подробности</h2>
-            <p>Портрет с человеком — вы даёте мне своё фото в полный рост и фото аниме персонажа / вашей подруги / друга или же любого человека в мире (даже Флаттершай, к примеру).</p>
-            <div style="text-align: right;">
-                <button class="back-btn" onclick="closeModal('portretDetails'); openModal('signyMenu')">назад</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Функции для управления модальными окнами
-        function openModal(id) {
-            const overlay = document.getElementById(id);
-            if (overlay) {
-                overlay.classList.add('active');
+            `;
+            // Вторая услуга (поиск информации) появляется после первого возврата
+            if (servicesAdded) {
+                servicesHtml += `
+                    <div class="service-card">
+                        <h3>поиск информации</h3>
+                        <span class="price">500р</span>
+                        <button class="panel-btn" onclick="openServiceDetails('search')">купить</button>
+                    </div>
+                `;
             }
+            servicesHtml += `</div><button class="panel-btn back" onclick="goBack()">Назад</button>`;
+            showPanel(servicesHtml);
+        } else if (type === 'signs') {
+            currentView = 'signs';
+            showPanel(`
+                <h2>🎨 Сигны</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>аниме сигна</h3>
+                        <span class="price">50р</span>
+                        <button class="panel-btn" onclick="openServiceDetails('anime-sign')">купить</button>
+                    </div>
+                    <div class="service-card">
+                        <h3>портрет с человеком</h3>
+                        <span class="price">200р</span>
+                        <button class="panel-btn" onclick="openServiceDetails('portrait')">купить</button>
+                    </div>
+                </div>
+                <button class="panel-btn back" onclick="closePanel()">Назад</button>
+            `);
         }
+    }
 
-        function closeModal(id) {
-            const overlay = document.getElementById(id);
-            if (overlay) {
-                overlay.classList.remove('active');
-            }
+    // === Открыть подробности услуги ===
+    function openServiceDetails(service) {
+        let html = '';
+        if (service === 'snos') {
+            html = `
+                <h2>📋 Подробности сноса</h2>
+                <p>Не стопроцентный. Вы оплачиваете 250р только тогда, когда аккаунт будет снесен.<br>Время ожидания 1–7 дней.</p>
+                <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
+            `;
+        } else if (service === 'search') {
+            html = `
+                <h2>📋 Подробнее</h2>
+                <p>Поиск данных людей тоже не стопроцентный.<br>Примерный срок исполнения до 3 дней.</p>
+                <button class="panel-btn back" onclick="openMainMenu('services')">Назад</button>
+            `;
+        } else if (service === 'anime-sign') {
+            html = `
+                <h2>📋 Подробности</h2>
+                <p>Аниме сигна — вы даёте мне название вашего аниме персонажа, фон и текст, который там должен присутствовать. После чего я вам дам итог работы.</p>
+                <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
+            `;
+        } else if (service === 'portrait') {
+            html = `
+                <h2>📋 Подробности</h2>
+                <p>Портрет с человеком — вы даёте мне своё фото в полный рост и фото аниме персонажа / вашей подруги / друга или же любого человека в мире (даже флаттершай, к примеру).</p>
+                <button class="panel-btn back" onclick="openMainMenu('signs')">Назад</button>
+            `;
         }
+        showPanel(html);
+    }
 
-        // Закрытие по клику на фон (за пределами модального окна) — опционально
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-    </script>
+    // === Закрытие оверлея по клику вне панели ===
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            closePanel();
+        }
+    });
+        // === Инициализация: услуга "поиск информации" не добавлена до первого возврата ===
+    // При первом открытии "поиск информации людей" она не появится, пока пользователь не нажмёт "назад"
+    // Позже при повторном открытии она будет видна.
+</script>
+
 </body>
 </html>
